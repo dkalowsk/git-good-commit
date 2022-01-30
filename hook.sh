@@ -146,11 +146,11 @@ validate_commit_message() {
   test ${#COMMIT_MSG_LINES[@]} -lt 1 || test -z "${COMMIT_MSG_LINES[1]}"
   test $? -eq 0 || add_warning 2 "Separate subject from body with a blank line"
 
-  # 2. Limit the subject line to 50 characters
+  # 2. Limit the subject line to 72 characters
   # ------------------------------------------------------------------------------
 
-  test "${#COMMIT_SUBJECT}" -le 50
-  test $? -eq 0 || add_warning 1 "Limit the subject line to 50 characters (${#COMMIT_SUBJECT} chars)"
+  test "${#COMMIT_SUBJECT}" -le 72
+  test $? -eq 0 || add_warning 1 "Limit the subject line to 72 characters (${#COMMIT_SUBJECT} chars)"
 
   # 3. Capitalize the subject line
   # ------------------------------------------------------------------------------

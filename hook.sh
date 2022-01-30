@@ -26,7 +26,8 @@ NC=
 #
 
 set_colors() {
-  local default_color=$(git config --get hooks.goodcommit.color || git config --get color.ui || echo 'auto')
+  local default_color=
+  default_color=$(git config --get hooks.goodcommit.color || git config --get color.ui || echo 'auto')
   if [[ $default_color == 'always' ]] || [[ $default_color == 'auto' && -t 1 ]]; then
     RED='\033[1;31m'
     YELLOW='\033[1;33m'
@@ -87,7 +88,7 @@ display_warnings() {
   fi
 
   for i in "${!WARNINGS[@]}"; do
-    printf "%-74s ${WHITE}%s${NC}\n" "${COMMIT_MSG_LINES[$(($i-1))]}" "[line ${i}]"
+    printf "%-74s ${WHITE}%s${NC}\n" "${COMMIT_MSG_LINES[$((i-1))]}" "[line ${i}]"
     IFS=';' read -ra WARNINGS_ARRAY <<< "${WARNINGS[$i]}"
     for ERROR in "${WARNINGS_ARRAY[@]}"; do
       echo -e " ${YELLOW}- ${ERROR}${NC}"

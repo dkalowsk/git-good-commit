@@ -1,28 +1,58 @@
 # git-good-commit
 
-[![Build Status](https://travis-ci.org/tommarshall/git-good-commit.svg?branch=master)](https://travis-ci.org/tommarshall/git-good-commit)
+This is a fork of [Tom
+Marshall's](https://github.com/tommarshall/git-good-commit) excellent bash
+script to help enforce git commit messages best practices.
 
-Git hook to help you write good commit messages.
+## Why A Fork?
+
+The original version has some hard set rules that I don't completely agree with
+and thus the fork.  It's possible the two can be reconciled later on, but right
+now with the needs I have I don't have the time to do so.  Yet, I want to make
+sure anyone else can use them (if needed).
+
+## What Changed?
+
+The original README cites:
 
 Validates commit messages conform to six of [the seven rules of a great git
 commit message](http://chris.beams.io/posts/git-commit/), plus a couple of
 extras:
 
 1. [Separate subject from body with a blank line](http://chris.beams.io/posts/git-commit/#separate)
-2. [Limit the subject line to 50 characters](http://chris.beams.io/posts/git-commit/#limit-50)
-3. [Capitalize the subject line](http://chris.beams.io/posts/git-commit/#capitalize)
-4. [Do not end the subject line with a period](http://chris.beams.io/posts/git-commit/#end)
-5. [Use the imperative mood in the subject line](http://chris.beams.io/posts/git-commit/#imperative)
-6. [Wrap the body at 72 characters](http://chris.beams.io/posts/git-commit/#wrap-72)
-7. ~~[Use the body to explain what and why vs.
+1. [Limit the subject line to 50 characters](http://chris.beams.io/posts/git-commit/#limit-50)
+1. [Capitalize the subject line](http://chris.beams.io/posts/git-commit/#capitalize)
+1. [Do not end the subject line with a period](http://chris.beams.io/posts/git-commit/#end)
+1. [Use the imperative mood in the subject line](http://chris.beams.io/posts/git-commit/#imperative)
+1. [Wrap the body at 72 characters](http://chris.beams.io/posts/git-commit/#wrap-72)
+1. ~~[Use the body to explain what and why vs.
    how](http://chris.beams.io/posts/git-commit/#why-not-how)~~ _- you're on your
    own with this one_
-8. Do no write single worded commits
-9. Do not start the subject line with whitespace
+1. Do no write single worded commits
+1. Do not start the subject line with whitespace
 
-Offers an interactive prompt if any of the rules are detected to be broken.
+The updated rules for this version:
 
-![git-good-commit animated demo](demo.gif)
+1. [Separate subject from body with a blank line](http://chris.beams.io/posts/git-commit/#separate)
+1. Limit the subject line to 72 characters
+1. Prefix the subject line with the area of work
+1. [Do not end the subject line with a period](http://chris.beams.io/posts/git-commit/#end)
+1. [Use the imperative mood in the subject line](http://chris.beams.io/posts/git-commit/#imperative)
+1. [Wrap the body at 72 characters](http://chris.beams.io/posts/git-commit/#wrap-72)
+1. ~~[Use the body to explain what and why vs.
+   how](http://chris.beams.io/posts/git-commit/#why-not-how)~~ _- you're on your
+   own with this one_
+1. Do no write single worded commits
+1. Do not start the subject line with whitespace
+
+I don't believe in the 50 character limit for the subject line.  The value has
+been average discovered over time, but is not the maximum line length.  The
+subject should be short, as short as possible, but not obscure and sometimes
+that goes beyond 50 characters.
+
+Adding the section on prefix'ing the subject line with the area of work.  This
+makes it easier to examine the git log and see what is going on where.  For
+example `drivers/i2c: add support for DesignWare`.
 
 ## Installation
 

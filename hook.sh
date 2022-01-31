@@ -26,7 +26,8 @@ NC=
 #
 
 set_colors() {
-  local default_color=$(git config --get hooks.goodcommit.color || git config --get color.ui || echo 'auto')
+  local default_color=
+  default_color=$(git config --get hooks.goodcommit.color || git config --get color.ui || echo 'auto')
   if [[ $default_color == 'always' ]] || [[ $default_color == 'auto' && -t 1 ]]; then
     RED='\033[1;31m'
     YELLOW='\033[1;33m'
@@ -87,7 +88,7 @@ display_warnings() {
   fi
 
   for i in "${!WARNINGS[@]}"; do
-    printf "%-74s ${WHITE}%s${NC}\n" "${COMMIT_MSG_LINES[$(($i-1))]}" "[line ${i}]"
+    printf "%-74s ${WHITE}%s${NC}\n" "${COMMIT_MSG_LINES[$((i-1))]}" "[line ${i}]"
     IFS=';' read -ra WARNINGS_ARRAY <<< "${WARNINGS[$i]}"
     for ERROR in "${WARNINGS_ARRAY[@]}"; do
       echo -e " ${YELLOW}- ${ERROR}${NC}"
@@ -146,18 +147,27 @@ validate_commit_message() {
   test ${#COMMIT_MSG_LINES[@]} -lt 1 || test -z "${COMMIT_MSG_LINES[1]}"
   test $? -eq 0 || add_warning 2 "Separate subject from body with a blank line"
 
-  # 2. Limit the subject line to 50 characters
+  # 2. Limit the subject line to 72 characters
   # ------------------------------------------------------------------------------
 
-  test "${#COMMIT_SUBJECT}" -le 50
-  test $? -eq 0 || add_warning 1 "Limit the subject line to 50 characters (${#COMMIT_SUBJECT} chars)"
+  test "${#COMMIT_SUBJECT}" -le 72
+  test $? -eq 0 || add_warning 1 "Limit the subject line to 72 characters (${#COMMIT_SUBJECT} chars)"
 
-  # 3. Capitalize the subject line
+  # 3. Prefix the subject with the area of work
   # ------------------------------------------------------------------------------
 
-  [[ ${COMMIT_SUBJECT} =~ ^[[:blank:]]*([[:upper:]]{1}[[:lower:]]*|[[:digit:]]+)([[:blank:]]|[[:punct:]]|$) ]]
-  test $? -eq 0 || add_warning 1 "Capitalize the subject line"
+  [[ ${COMMIT_SUBJECT} =~ (^\w.*): ]]
+  test $? -eq 0 || add_warning 1 "Subject does not have a topic keyword"
 
+  # 3a. Do not prefix a commit with WIP or Draft
+  # ------------------------------------------------------------------------------
+
+  # these work because check 3 forces a : in the topic
+  [[ ${COMMIT_SUBJECT,,} == "wip:"* ]]
+  test $? -eq 0 || add_warning 1 "Do not use 'WIP' in commit subjects"
+
+  [[ ${COMMIT_SUBJECT,,} == "draft:"* ]]
+  test $? -eq 0 || add_warning 1 "Do not use 'Draft' in commit subjects"
   # 4. Do not end the subject line with a period
   # ------------------------------------------------------------------------------
 

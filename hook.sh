@@ -159,6 +159,15 @@ validate_commit_message() {
   [[ ${COMMIT_SUBJECT} =~ (^\w.*): ]]
   test $? -eq 0 || add_warning 1 "Subject does not have a topic keyword"
 
+  # 3a. Do not prefix a commit with WIP or Draft
+  # ------------------------------------------------------------------------------
+
+  # these work because check 3 forces a : in the topic
+  [[ ${COMMIT_SUBJECT,,} == "wip:"* ]]
+  test $? -eq 0 || add_warning 1 "Do not use 'WIP' in commit subjects"
+
+  [[ ${COMMIT_SUBJECT,,} == "draft:"* ]]
+  test $? -eq 0 || add_warning 1 "Do not use 'Draft' in commit subjects"
   # 4. Do not end the subject line with a period
   # ------------------------------------------------------------------------------
 
